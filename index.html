@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samuel Ramirez — ADSO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0E14;
+    --bg-soft: #0D1117;
+    --surface: #11161F;
+    --surface-2: #161D29;
+    --border: #232B38;
+    --text: #C9D1D9;
+    --text-dim: #6B7685;
+    --text-bright: #F0F3F7;
+    --accent: #5EEAD4;
+    --accent-dim: #2D6E63;
+    --amber: #F59E0B;
+    --bg2: #0F0B0A;
+    --surface2: #1A130F;
+    --surface2-2: #20170F;
+    --border2: #2E2117;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--accent); color:#06140F; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(10,14,20,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:56px;
+  }
+  .nav-brand{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:14px;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .nav-brand .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+  }
+  .nav-links{
+    display:flex;
+    gap:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+  .nav-links a{ transition:color .15s; }
+  .nav-links a:hover{ color:var(--accent); }
+  .nav-links a::before{ content:'#'; color:var(--border); margin-right:2px; }
+
+  @media (max-width:640px){
+    .nav-links{ display:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:90px 0 70px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:-200px; right:-200px;
+    width:500px; height:500px;
+    background:radial-gradient(circle, rgba(94,234,212,0.07), transparent 70%);
+    pointer-events:none;
+  }
+
+  .terminal{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    background:var(--surface-2);
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-bottom:1px solid var(--border);
+  }
+  .terminal-bar .tdot{ width:11px; height:11px; border-radius:50%; }
+  .tdot.red{ background:#FF5F56; }
+  .tdot.yellow{ background:#FFBD2E; }
+  .tdot.green{ background:#27C93F; }
+  .terminal-title{
+    margin-left:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:var(--text-dim);
+  }
+  .terminal-body{
+    padding:28px 26px 32px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+  }
+  .terminal-body .line{ color:var(--text-dim); margin-bottom:6px; }
+  .terminal-body .line .prompt{ color:var(--accent); }
+  .terminal-body .line .cmd{ color:var(--text-bright); }
+
+  .hero-name{
+    font-size:clamp(36px, 6vw, 56px);
+    font-weight:800;
+    color:var(--text-bright);
+    margin:18px 0 4px;
+    letter-spacing:-0.5px;
+  }
+  .hero-role{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--accent);
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .cursor{
+    display:inline-block;
+    width:9px; height:18px;
+    background:var(--accent);
+    margin-left:4px;
+    vertical-align:middle;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-desc{
+    color:var(--text);
+    font-size:16px;
+    max-width:560px;
+    margin-bottom:8px;
+  }
+
+  .hero-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:22px;
+  }
+  .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    padding:5px 10px;
+    border:1px solid var(--border);
+    border-radius:5px;
+    color:var(--text-dim);
+    background:var(--bg-soft);
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--border); }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:34px;
+  }
+  .sec-prompt{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--accent);
+    font-size:13px;
+    font-weight:600;
+  }
+  .sec-title{
+    font-size:26px;
+    font-weight:700;
+    color:var(--text-bright);
+    letter-spacing:-0.3px;
+  }
+
+  /* ---------- PERFIL (objective) ---------- */
+  .perfil-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:680px){ .perfil-grid{ grid-template-columns:1fr; } }
+  .perfil-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px 24px;
+  }
+  .perfil-card h3{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+  .perfil-card p{ color:var(--text); font-size:14.5px; }
+
+  /* ---------- TIMELINE (experiencia) ---------- */
+  .timeline{
+    position:relative;
+    padding-left:26px;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:6px; top:6px; bottom:6px;
+    width:1.5px;
+    background:linear-gradient(var(--accent), var(--border));
+    opacity:0.4;
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:34px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:'';
+    position:absolute;
+    left:-26px; top:4px;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--accent);
+  }
+  .tl-date{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:var(--text-dim);
+    margin-bottom:4px;
+  }
+  .tl-role{
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--text-bright);
+    margin-bottom:2px;
+  }
+  .tl-company{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  .tl-list{
+    list-style:none;
+    font-size:14px;
+    color:var(--text);
+  }
+  .tl-list li{
+    position:relative;
+    padding-left:16px;
+    margin-bottom:4px;
+  }
+  .tl-list li::before{
+    content:'›';
+    position:absolute;
+    left:0;
+    color:var(--text-dim);
+  }
+
+  /* ---------- PROYECTOS ---------- */
+  .proj-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  @media (max-width:780px){ .proj-grid{ grid-template-columns:1fr; } }
+  .proj-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px;
+    transition:border-color .2s, transform .2s;
+  }
+  .proj-card:hover{
+    border-color:var(--accent-dim);
+    transform:translateY(-3px);
+  }
+  .proj-card .proj-status{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    color:var(--amber);
+    border:1px solid rgba(245,158,11,0.3);
+    background:rgba(245,158,11,0.08);
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:4px;
+    margin-bottom:14px;
+    letter-spacing:0.5px;
+  }
+  .proj-card .proj-status.done{
+    color:var(--accent);
+    border-color:rgba(94,234,212,0.3);
+    background:rgba(94,234,212,0.08);
+  }
+  .proj-card h4{
+    font-size:16px;
+    color:var(--text-bright);
+    margin-bottom:8px;
+  }
+  .proj-card p{
+    font-size:13.5px;
+    color:var(--text-dim);
+    margin-bottom:14px;
+  }
+  .proj-stack{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .proj-stack span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    color:var(--accent);
+    background:rgba(94,234,212,0.07);
+    padding:3px 7px;
+    border-radius:4px;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:680px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-block h3{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:14px;
+  }
+  .skill-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:14px;
+    margin-bottom:12px;
+    gap:14px;
+  }
+  .skill-name{ min-width:140px; color:var(--text); }
+  .skill-bar-track{
+    flex:1;
+    height:5px;
+    background:var(--border);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .skill-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+    border-radius:3px;
+  }
+
+  .soft-skills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .soft-pill{
+    font-size:13px;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    background:var(--bg-soft);
+    color:var(--text);
+  }
+
+  /* ---------- DIVIDER between part 1 / part 2 ---------- */
+  .part-divider{
+    background:var(--bg2);
+    padding:54px 0 18px;
+    border-top:1px solid var(--border2);
+    text-align:center;
+  }
+  .part-divider .mono{
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:2px;
+  }
+  .part-divider h2{
+    font-size:28px;
+    color:var(--text-bright);
+    margin-top:10px;
+  }
+  .part-divider p{
+    color:var(--text-dim);
+    max-width:520px;
+    margin:10px auto 0;
+    font-size:14.5px;
+  }
+
+  /* ---------- HOBBIES (part 2 reskin) ---------- */
+  .hobbies-section{
+    background:var(--bg2);
+    padding:50px 0 70px;
+  }
+  .hobby-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:18px;
+  }
+  @media (max-width:680px){ .hobby-grid{ grid-template-columns:1fr; } }
+  .hobby-card{
+    background:var(--surface2);
+    border:1px solid var(--border2);
+    border-radius:10px;
+    padding:22px;
+    display:flex;
+    gap:16px;
+  }
+  .hobby-icon{
+    width:42px; height:42px;
+    flex-shrink:0;
+    border-radius:9px;
+    background:var(--surface2-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+  }
+  .hobby-card h4{
+    font-size:15.5px;
+    color:var(--text-bright);
+    margin-bottom:5px;
+  }
+  .hobby-card p{
+    font-size:13.5px;
+    color:var(--text-dim);
+  }
+  .hobby-tie{
+    margin-top:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--accent);
+  }
+
+  /* ---------- FOOTER / STATUS BAR ---------- */
+  footer{
+    background:var(--surface-2);
+    border-top:1px solid var(--border);
+    padding:18px 0;
+  }
+  .status-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--text-dim);
+  }
+  .status-bar a:hover{ color:var(--accent); }
+  .status-left{ display:flex; gap:18px; flex-wrap:wrap; }
+  .status-left span{ display:flex; align-items:center; gap:6px; }
+  .status-dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--accent);
+  }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:5px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand"><span class="dot"></span>samuel.ramirez</div>
+    <div class="nav-links">
+      <a href="#perfil">perfil</a>
+      <a href="#experiencia">experiencia</a>
+      <a href="#proyectos">proyectos</a>
+      <a href="#skills">skills</a>
+      <a href="#hobbies">hobbies</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="tdot red"></span>
+        <span class="tdot yellow"></span>
+        <span class="tdot green"></span>
+        <span class="terminal-title">~/samuel-ramirez — perfil.sh</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> <span class="cmd">whoami</span></div>
+        <div class="line">samuel_ramirez — tecnólogo en formación, ADSO · SENA</div>
+        <div class="line"><span class="prompt">$</span> <span class="cmd">cat status.txt</span></div>
+        <div class="line">cargando perfil profesional...</div>
+      </div>
+    </div>
+
+    <h1 class="hero-name">Samuel Ramirez<span class="cursor"></span></h1>
+    <div class="hero-role">// futuro desarrollador de software · análisis y desarrollo de software</div>
+    <p class="hero-desc">
+      Estudiante de Tecnología en Análisis y Desarrollo de Software (SENA, 2025–2027).
+      Construyendo bases sólidas en desarrollo web, bases de datos y metodologías ágiles,
+      con la mira puesta en convertirme en un desarrollador capaz de diseñar soluciones
+      reales, escribir código limpio y trabajar en equipos ágiles.
+    </p>
+    <div class="hero-tags">
+      <span class="tag">📍 Soacha, Cundinamarca</span>
+      <span class="tag">🎓 ADSO 2025–2027</span>
+      <span class="tag">🌐 ES nativo · EN nivel alto</span>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== PARTE 1 ====================== -->
+
+<section id="perfil">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-prompt">~/perfil $</span>
+      <h2 class="sec-title">Perfil profesional</h2>
+    </div>
+    <div class="perfil-grid">
+      <div class="perfil-card">
+        <h3>// quién soy hoy</h3>
+        <p>
+          Joven con gran capacidad de adaptación, trabajo en equipo y orientación a resultados.
+          Combino experiencia en atención al cliente, logística y trabajo manual con una
+          formación técnica creciente en desarrollo de software.
+        </p>
+      </div>
+      <div class="perfil-card">
+        <h3>// quién aspiro ser al graduarme</h3>
+        <p>
+          Al finalizar el tecnólogo aspiro a desempeñarme como desarrollador de software junior,
+          construyendo aplicaciones web completas: desde el modelado de datos y la base de datos,
+          hasta interfaces funcionales, aplicando buenas prácticas de control de versiones y
+          metodologías ágiles como Scrum en equipos reales.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experiencia">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-prompt">~/experiencia $</span>
+      <h2 class="sec-title">Experiencia laboral</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">feb 2026 — may 2026</div>
+        <div class="tl-role">Auxiliar de carpintería</div>
+        <div class="tl-company">Formaderas</div>
+        <ul class="tl-list">
+          <li>Apoyo en corte, ensamblaje y acabado de piezas de madera.</li>
+          <li>Manejo de herramientas y organización del área de trabajo.</li>
+          <li>Desarrollo de habilidades de trabajo en equipo y solución de problemas.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">dic 2024 — jul 2025</div>
+        <div class="tl-role">Auxiliar de supermercado</div>
+        <div class="tl-company">Surtihogar San Nicolás</div>
+        <ul class="tl-list">
+          <li>Atención y orientación al cliente.</li>
+          <li>Organización y control de inventario.</li>
+          <li>Apoyo logístico en bodega y surtido de productos.</li>
+          <li>Trabajo bajo presión y cumplimiento de tareas operativas.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">ago 2024 — dic 2024</div>
+        <div class="tl-role">Operario de reciclaje y manejo de residuos</div>
+        <div class="tl-company">Frenos los Trianas</div>
+        <ul class="tl-list">
+          <li>Clasificación y manejo de materiales reciclables.</li>
+          <li>Apoyo en procesos de recolección y organización.</li>
+          <li>Cumplimiento de normas de seguridad y trabajo operativo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proyectos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-prompt">~/proyectos $</span>
+      <h2 class="sec-title">Proyectos</h2>
+    </div>
+    <p style="color:var(--text-dim); font-size:13.5px; margin-bottom:24px; max-width:560px;">
+      Aún no tengo proyectos publicados — esta sección está reservada para los primeros
+      trabajos del tecnólogo. Aquí va la estructura que usaré en cuanto los tenga listos.
+    </p>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <span class="proj-status">en construcción</span>
+        <h4>Sistema de inventario web</h4>
+        <p>Aplicación para gestión de inventario con MER propio, pensada a partir de mi experiencia en bodega.</p>
+        <div class="proj-stack">
+          <span>HTML</span><span>PHP</span><span>MySQL</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <span class="proj-status">próximamente</span>
+        <h4>Tablero de historias de usuario</h4>
+        <p>Mini herramienta tipo Scrum board para practicar historias de usuario e IEEE 830.</p>
+        <div class="proj-stack">
+          <span>JavaScript</span><span>CSS</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <span class="proj-status done">casi finalizado</span>
+        <h4>Sistema de gestión de reservas — Vivero</h4>
+        <p>Sistema de reservas adaptable a cualquier negocio mediante rebranding. Gestión completa de clientes, productos y disponibilidad, con base de datos MySQL en proceso de despliegue.</p>
+        <div class="proj-stack">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Java</span><span>MySQL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-prompt">~/skills $</span>
+      <h2 class="sec-title">Habilidades</h2>
+    </div>
+    <div class="skills-grid" style="margin-bottom:36px;">
+      <div class="skill-block">
+        <h3>// software & desarrollo</h3>
+        <div class="skill-row"><span class="skill-name mono">HTML / CSS / JS</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:65%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Python / PHP</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:55%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Git / GitHub</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Bases de datos</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">MER / modelado</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:55%"></div></div></div>
+      </div>
+      <div class="skill-block">
+        <h3>// metodologías & herramientas</h3>
+        <div class="skill-row"><span class="skill-name mono">Scrum</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Diagramas UML</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:55%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Historias de usuario / IEEE 830</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:55%"></div></div></div>
+        <div class="skill-row"><span class="skill-name mono">Ofimática</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+      </div>
+    </div>
+
+    <h3 class="mono" style="font-size:12px; color:var(--amber); text-transform:uppercase; letter-spacing:1px; margin-bottom:14px;">// habilidades blandas y laborales</h3>
+    <div class="soft-skills">
+      <span class="soft-pill">Trabajo en equipo</span>
+      <span class="soft-pill">Adaptación a nuevos entornos</span>
+      <span class="soft-pill">Proactividad</span>
+      <span class="soft-pill">Resolución de problemas</span>
+      <span class="soft-pill">Trabajo bajo presión</span>
+      <span class="soft-pill">Orientación a resultados</span>
+      <span class="soft-pill">Compromiso</span>
+      <span class="soft-pill">Comunicación con clientes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== DIVISOR ====================== -->
+
+<div class="part-divider">
+  <div class="wrap">
+    <span class="mono">// PARTE 02</span>
+    <h2>Fuera del código</h2>
+    <p>Actividades, hobbies y tiempo libre que también construyen al desarrollador y a la persona detrás del teclado.</p>
+  </div>
+</div>
+
+<!-- ====================== PARTE 2 ====================== -->
+
+<section id="hobbies" class="hobbies-section" style="border-top:none; padding-top:10px;">
+  <div class="wrap">
+    <div class="hobby-grid">
+      <div class="hobby-card">
+        <div class="hobby-icon">🎮</div>
+        <div>
+          <h4>Videojuegos</h4>
+          <p>Disfruto los videojuegos como espacio de estrategia y resolución de problemas bajo presión.</p>
+          <div class="hobby-tie">↳ refuerza lógica y pensamiento por sistemas</div>
+        </div>
+      </div>
+      <div class="hobby-card">
+        <div class="hobby-icon">⚽</div>
+        <div>
+          <h4>Deporte</h4>
+          <p>El deporte en equipo me ayuda a mantener disciplina, energía y buena comunicación con otros.</p>
+          <div class="hobby-tie">↳ trabajo en equipo y constancia</div>
+        </div>
+      </div>
+      <div class="hobby-card">
+        <div class="hobby-icon">🎧</div>
+        <div>
+          <h4>Música</h4>
+          <p>Escuchar y explorar música es mi forma de concentrarme cuando estoy programando o estudiando.</p>
+          <div class="hobby-tie">↳ foco y manejo del tiempo</div>
+        </div>
+      </div>
+      <div class="hobby-card">
+        <div class="hobby-icon">🛠️</div>
+        <div>
+          <h4>Proyectos manuales</h4>
+          <p>Gracias a mi experiencia en carpintería disfruto armar y reparar cosas con las manos en mi tiempo libre.</p>
+          <div class="hobby-tie">↳ paciencia y atención al detalle</div>
+        </div>
+      </div>
+      <div class="hobby-card">
+        <div class="hobby-icon">📚</div>
+        <div>
+          <h4>Aprendizaje autodidacta</h4>
+          <p>Me gusta investigar por mi cuenta sobre nuevas herramientas y tecnologías de programación.</p>
+          <div class="hobby-tie">↳ curiosidad técnica constante</div>
+        </div>
+      </div>
+      <div class="hobby-card">
+        <div class="hobby-icon">🤝</div>
+        <div>
+          <h4>Tiempo en familia y amigos</h4>
+          <p>Compartir tiempo con quienes me rodean me mantiene motivado y con los pies en la tierra.</p>
+          <div class="hobby-tie">↳ equilibrio personal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="status-bar">
+      <div class="status-left">
+        <span><span class="status-dot"></span>disponible para prácticas</span>
+        <span>📞 310 313 54 99</span>
+        <a href="mailto:johansamuelramirezperilla@gmail.com">✉ johansamuelramirezperilla@gmail.com</a>
+      </div>
+      <div>© 2026 samuel.ramirez — Cra 7 #2A-35, Soacha, Cundinamarca</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
